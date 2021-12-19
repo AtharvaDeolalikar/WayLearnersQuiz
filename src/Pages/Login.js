@@ -1,6 +1,6 @@
 import { Box, Button, Chip, Divider, TextField, Typography } from "@mui/material";
 import GoogleIcon from '@mui/icons-material/Google';
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { contextValues } from "../Contexts/AuthContext";
 
 export default function Login(){
@@ -11,6 +11,13 @@ export default function Login(){
         e.preventDefault();
         context.signInWithEmail(e.target.email.value, e.target.password.value)
     }
+
+    useEffect(() => {
+        if(context.currentUser){
+            context.navigate("/")
+        }
+    })
+    
 
     return (
         <>

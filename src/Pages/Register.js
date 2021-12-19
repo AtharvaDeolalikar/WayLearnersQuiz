@@ -1,10 +1,16 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { contextValues } from "../Contexts/AuthContext";
 
 export default function Register(){
-
     const context = useContext(contextValues)
+
+    useEffect(() => {
+        if(context.userData){
+            context.navigate("/")
+        }
+    })
+    
 
     function registerUser(e){
         e.preventDefault()

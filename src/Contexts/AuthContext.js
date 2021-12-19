@@ -56,6 +56,7 @@ export default function ContextProvider({children}){
     function signInWithEmail(email, password){
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                navigate("/")
             })
             .catch((error) => {
                 console.log(error)
@@ -68,6 +69,7 @@ export default function ContextProvider({children}){
             .then((result) => {
                 const user = result.user;
                 setCurrentUser(user)
+                navigate("/")
             }).catch((error) => {
                 console.log(error)
             });
@@ -144,7 +146,8 @@ export default function ContextProvider({children}){
         saveHandler,
         updateUser,
         getExams,
-        logOut
+        logOut,
+        navigate
     }
     return(
         <ThemeProvider theme={Theme}>
