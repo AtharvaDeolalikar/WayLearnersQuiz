@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { contextValues } from "../Contexts/AuthContext";
 import Timer from "../Timer";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
+import Navbar from "../Components/Navbar";
 
 export default function Attempt(){
     const {examID} = useParams()
@@ -78,6 +79,8 @@ export default function Attempt(){
 
 
     return (
+        <>
+        <Navbar />
         <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "95vh"}}>
             {!timer.expired ? <Box sx={{bgcolor: "white", borderRadius: 3, p:3, width: { md: 800}, display: "flex", flexDirection: "column"}}>
              <Typography fontWeight={500} fontSize={20} sx={{textAlign: "left"}}>Q. {currentQuestion+1} {questions[currentQuestion].question}</Typography>
@@ -107,5 +110,6 @@ export default function Attempt(){
                 <Typography fontSize={20} fontWeight={300}>We'll let you know the results very soon.</Typography>
             </Box>}
         </Box>
+        </>
     )
 }

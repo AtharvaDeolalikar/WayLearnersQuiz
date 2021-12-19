@@ -1,6 +1,7 @@
 import { Box, Button, Chip, CircularProgress, Stack, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import Navbar from "../Components/Navbar";
 import { contextValues } from "../Contexts/AuthContext";
 import Timer from "../Timer";
 
@@ -44,6 +45,7 @@ export default function Exam(){
     
 
     return (
+        <><Navbar />
         <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: "90vh"}}>
             {currentExam ? 
             <Box sx={{bgcolor: "white", borderRadius: 3, p:3, minWidth: 450}}>
@@ -67,5 +69,6 @@ export default function Exam(){
             </Box> :
             <CircularProgress />}
         </Box>
+        </>
     )
 }

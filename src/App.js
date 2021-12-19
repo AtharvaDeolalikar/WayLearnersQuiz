@@ -5,6 +5,7 @@ import Attempt from './Pages/Attempt';
 import Exam from './Pages/Exam';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
+import Profile from './Pages/Profile';
 import Register from './Pages/Register';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/exam" element={<Navigate to="/" />} />
         <Route path="/exam/:examID" element={<Exam />} />
         <Route path="/exam/:examID/attempt" element={<Attempt />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </ContextProvider>
   );

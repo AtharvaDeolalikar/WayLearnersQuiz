@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@mui/material";
 import { createContext, useEffect, useState } from "react";
 import Theme from "./Theme";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc, getDocs, collection, updateDoc } from "firebase/firestore"
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../Utils/firebase";
@@ -74,12 +74,33 @@ export default function ContextProvider({children}){
     }
 
     async function registerUser(data){
-        await setDoc(doc(db, "Students", currentUser.uid), {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            emailID : currentUser.email,
-            phoneNo: data.phoneNo
-          });   
+        try{
+            await setDoc(doc(db, "Students", currentUser.uid), {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                emailID : currentUser.email,
+                phoneNo: data.phoneNo
+            })
+            navigate("/")
+        }catch(error){
+            console.log(error)
+        }
+          
+    }
+
+    async function updateUser(data){
+        try{
+            await updateDoc(doc(db, "Students", currentUser.uid), {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                emailID : currentUser.email,
+                phoneNo: data.phoneNo
+              });
+            //console.log("Updated")
+        }
+        catch(error){
+            console.log(error)
+        }  
     }
 
     async function getExams(){
@@ -104,6 +125,14 @@ export default function ContextProvider({children}){
         }   
     }
 
+    async function logOut(){
+        signOut(auth).then(() => {
+            navigate("/login")
+          }).catch((error) => {
+            console.log(error)
+          });
+    }
+
 
     const value = {
         signInWithEmail,
@@ -113,7 +142,9 @@ export default function ContextProvider({children}){
         examsData,
         registerUser,
         saveHandler,
-        getExams
+        updateUser,
+        getExams,
+        logOut
     }
     return(
         <ThemeProvider theme={Theme}>
