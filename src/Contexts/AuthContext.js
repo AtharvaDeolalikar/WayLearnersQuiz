@@ -2,7 +2,7 @@ import { ThemeProvider } from "@mui/material";
 import { createContext, useEffect, useState } from "react";
 import Theme from "./Theme";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, getDocs, collection, updateDoc } from "firebase/firestore"
+import { getFirestore, doc, getDoc, setDoc, getDocs, collection, updateDoc, arrayUnion } from "firebase/firestore"
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../Utils/firebase";
 import { GoogleAuthProvider } from "firebase/auth";
@@ -11,12 +11,12 @@ import Loading from "../Components/Loading";
 
 export const contextValues = createContext()
 
-export default function ContextProvider({children}){
-    const app = initializeApp(firebaseConfig)
-    const auth = getAuth()
-    const db = getFirestore()
-    const provider = new GoogleAuthProvider()
+const app = initializeApp(firebaseConfig)
+const auth = getAuth()
+const db = getFirestore()
+const provider = new GoogleAuthProvider()
 
+export default function ContextProvider({children}){
     const [loading, setLoading] = useState(true)
     const [currentUser, setCurrentUser] = useState(false)
     const [userData, setUserData] = useState(false)
@@ -26,7 +26,7 @@ export default function ContextProvider({children}){
 
     useEffect(() => { 
         async function getUserData(uid){
-            const docSnap = await getDoc(doc(db, "Students", uid));
+            const docSnap = await getDoc(doc(db, "Students", uid))
             if (docSnap.exists()) {
                 setUserData(docSnap.data())
                 if(window.location.pathname == "/register"){
@@ -64,7 +64,6 @@ export default function ContextProvider({children}){
     }
 
     function signInWithGoogle(){
-        console.log("ABC")
         signInWithPopup(auth, provider)
             .then((result) => {
                 const user = result.user;
@@ -115,20 +114,26 @@ export default function ContextProvider({children}){
     }
 
     async function saveHandler(answerIndex, currentQuestion, examID){
-        var tempData = {}
-        tempData[currentQuestion] = Number(answerIndex)
-
+        var tempObj={userExamStatus: "ongoing"}
+        tempObj[currentQuestion] = answerIndex
         try{
-            await updateDoc(doc(db, "Exams", examID, "Answersheets" ,currentUser.uid), tempData)
+            await setDoc(doc(db, "Exams", examID, "Answersheets", currentUser.uid), tempObj, { merge: true })
         }catch(error) {
-            if(error.code == "not-found"){
-                await setDoc(doc(db, "Exams", examID, "Answersheets", currentUser.uid), tempData)
-            }
+            console.log(error)
+        }   
+    }
+
+    async function submitExam(examID, points){
+        try{
+            await updateDoc(doc(db, "Exams", examID, "Answersheets" ,currentUser.uid), {points, userExamStatus: "finished"})
+        }catch(error) {
+            console.log(error)
         }   
     }
 
     async function logOut(){
         signOut(auth).then(() => {
+            setCurrentUser()
             navigate("/login")
           }).catch((error) => {
             console.log(error)
@@ -144,6 +149,7 @@ export default function ContextProvider({children}){
         examsData,
         registerUser,
         saveHandler,
+        submitExam,
         updateUser,
         getExams,
         logOut,

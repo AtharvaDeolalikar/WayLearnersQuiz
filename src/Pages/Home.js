@@ -1,16 +1,15 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../Components/Navbar";
 import { contextValues } from "../Contexts/AuthContext";
 
 export default function Home(){
     const context = useContext(contextValues)
 
-    useEffect(() => {
-        console.log(context.examsData)
-    }, [])
-
     return (
+        <>
+        <Navbar />
         <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
             <Box sx={{bgcolor: "white", borderRadius: 3, p:3}}>
                 <Typography sx={{textAlign: "left", fontSize: 20}}>Scheduled Exams</Typography>
@@ -29,5 +28,6 @@ export default function Home(){
                 })}
             </Box>
         </Box>
+        </>
     )
 }

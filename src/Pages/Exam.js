@@ -13,7 +13,6 @@ export default function Exam(){
 
     useEffect(() => {
         var exam = context.examsData.find(exam => exam.examID === examID)
-        console.log(exam)
         setCurrentExam(exam)
 
         var deadline = new Date("Dec 18, 2021 01:06:00 GMT+0530").getTime()
@@ -21,8 +20,7 @@ export default function Exam(){
         const interval = setInterval(function(){
             current = current + 1000
             setTimer(Timer(deadline, current))
-            //console.log(timer)
-        }, 1000);
+        }, 1000)
         return () => {
             clearInterval(interval)
         }
