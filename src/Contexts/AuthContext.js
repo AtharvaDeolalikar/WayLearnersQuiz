@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@mui/material";
 import { createContext, useEffect, useState } from "react";
 import Theme from "./Theme";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged, RecaptchaVerifier, signInWithEmailAndPassword, signInWithPhoneNumber, signInWithPopup, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc, getDocs, collection, updateDoc, arrayUnion } from "firebase/firestore"
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../Utils/firebase";
@@ -16,6 +16,7 @@ const auth = getAuth()
 const db = getFirestore()
 const provider = new GoogleAuthProvider()
 
+
 export default function ContextProvider({children}){
     const [loading, setLoading] = useState(true)
     const [currentUser, setCurrentUser] = useState(false)
@@ -29,9 +30,6 @@ export default function ContextProvider({children}){
             const docSnap = await getDoc(doc(db, "Students", uid))
             if (docSnap.exists()) {
                 setUserData(docSnap.data())
-                if(window.location.pathname == "/register"){
-                    navigate("/")
-                }
                 setLoading(false)
               } else {
                 setLoading(false)
@@ -45,23 +43,13 @@ export default function ContextProvider({children}){
                 getUserData(user.uid)
                 console.log(user)
             } else {
-                navigate("/login")   
+                navigate("/login")
                 setLoading(false)
             }
         })
 
         getExams()
     }, [])
-
-    function signInWithEmail(email, password){
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                navigate("/")
-            })
-            .catch((error) => {
-                console.log(error)
-            });
-    }
 
     function signInWithGoogle(){
         signInWithPopup(auth, provider)
@@ -70,6 +58,21 @@ export default function ContextProvider({children}){
                 setCurrentUser(user)
                 navigate("/")
             }).catch((error) => {
+                console.log(error)
+            });
+    }
+
+    function signInWithPhoneNo(phoneNumber){
+        console.log(phoneNumber)
+        signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+            .then((confirmationResult) => {
+            // SMS sent. Prompt user to type the code from the message, then sign the
+            // user in with confirmationResult.confirm(code).
+                window.confirmationResult = confirmationResult;
+            // ...
+            }).catch((error) => {
+            // Error; SMS not sent
+            // ...
                 console.log(error)
             });
     }
@@ -142,8 +145,8 @@ export default function ContextProvider({children}){
 
 
     const value = {
-        signInWithEmail,
         signInWithGoogle,
+        signInWithPhoneNo,
         currentUser,
         userData,
         examsData,

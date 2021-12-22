@@ -22,7 +22,7 @@ export default function Login(){
     return (
         <>
             <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
-                <Box component="form" onSubmit={signInWithEmail} sx={{bgcolor: "white", borderRadius: 3, width: 400, display: "flex", justifyContent: "center", flexDirection: "column", p:3}}>
+                <Box component="form" onSubmit={signInWithEmail} sx={{bgcolor: "white", borderRadius: 3, width: 400, display: "flex", justifyContent: "center", flexDirection: "column", p:3, m:2}}>
                     <Typography my={2} sx={{fontWeight: 500, fontSize: 25}}>Login</Typography>
                     <TextField name="Email" label="Email Address" sx={{my: 1}} fullWidth></TextField>
                     <TextField name="password" label="Password" sx={{my: 2}} type="password" fullWidth></TextField>

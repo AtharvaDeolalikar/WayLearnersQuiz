@@ -98,7 +98,7 @@ export default function Attempt(){
     return (
         <>
         <Navbar />
-        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "95vh"}}>
+        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "95vh", mt: {xs: 4}}}>
             {!timer.expired ? 
             <Box sx={{bgcolor: "white", borderRadius: 3, p:3,m:2, width: { md: 800}, display: "flex", flexDirection: "column"}} >
                 <Box sx={{textAlign: "left", mb: 2}}>
@@ -108,10 +108,10 @@ export default function Attempt(){
                     {questions[currentQuestion - 1].question}
                 </Typography>
                 
-                <RadioGroup sx={{my: 2}}>
+                <RadioGroup sx={{my: 2, textAlign: "left"}}>
                     {questions[currentQuestion - 1].options.map((option, index) => {
                         return(
-                            <FormControlLabel checked={index === selectedOption} onChange={(e) => makeChoice(Number(e.target.value))} key={index} value={index} control={<Radio />} label={option} />
+                            <FormControlLabel sx={{my:0.5}} checked={index === selectedOption} onChange={(e) => makeChoice(Number(e.target.value))} key={index} value={index} control={<Radio />} label={option} />
                         )
                     })}  
                 </RadioGroup>

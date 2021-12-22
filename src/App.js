@@ -5,6 +5,7 @@ import Attempt from './Pages/Attempt';
 import Exam from './Pages/Exam';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
+import PhoneAuth from './Pages/PhoneAuth';
 import Profile from './Pages/Profile';
 import Register from './Pages/Register';
 
@@ -14,6 +15,7 @@ function App() {
     <ContextProvider>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/login/phone" element={<PhoneAuth />} />        
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Home />} />
         <Route path="/exam" element={<Navigate to="/" />} />

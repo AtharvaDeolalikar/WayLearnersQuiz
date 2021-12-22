@@ -15,7 +15,7 @@ export default function Exam(){
         var exam = context.examsData.find(exam => exam.examID === examID)
         setCurrentExam(exam)
 
-        var deadline = new Date("Dec 23, 2021 01:06:00 GMT+0530").getTime()
+        var deadline = new Date("Dec 22, 2021 13:11:30 GMT+0530").getTime()
         var current = new Date().getTime()
         const interval = setInterval(function(){
             current = current + 1000
