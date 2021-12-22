@@ -114,10 +114,10 @@ export default function ContextProvider({children}){
     }
 
     async function saveHandler(answerIndex, currentQuestion, examID){
-        var tempObj={userExamStatus: "ongoing"}
+        var tempObj={}
         tempObj[currentQuestion] = answerIndex
         try{
-            await setDoc(doc(db, "Exams", examID, "Answersheets", currentUser.uid), tempObj, { merge: true })
+            await setDoc(doc(db, "Exams", examID, "Answersheets", currentUser.uid), {answers: tempObj, userExamStatus: "ongoing"}, { merge: true })
         }catch(error) {
             console.log(error)
         }   

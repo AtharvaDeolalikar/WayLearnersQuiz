@@ -2,6 +2,7 @@ import "../Loading.css"
 
 export default function Loading(){
     return (
+        <div className="loadingBody">
         <div className="loader">
             <div>
                 <ul>
@@ -37,6 +38,7 @@ export default function Loading(){
                 </li>
                 </ul>
             </div><span>Loading</span>
+        </div>
         </div>
     )
 }

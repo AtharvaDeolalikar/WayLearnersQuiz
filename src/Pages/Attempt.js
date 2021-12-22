@@ -28,7 +28,8 @@ export default function Attempt(){
             var tempData = answers.data()
             if(tempData && tempData.lastQuestion){
                 setCurrentQuestion(tempData.lastQuestion)
-            }else if(tempData){
+            }
+            if(tempData && tempData.userExamStatus){
                 setUserExamStatus(tempData.userExamStatus)
             }
         }
@@ -55,7 +56,9 @@ export default function Attempt(){
 
     if(!questions || !timer){
         return (
-            <CircularProgress />
+            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", height: "90vh"}}>
+                <CircularProgress />
+            </Box>
         )
     }
 
@@ -83,7 +86,7 @@ export default function Attempt(){
     if(userExamStatus == "finished"){
         return(
             <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "95vh"}}>
-                <Box sx={{bgcolor: "white", borderRadius: 3, p:3, width: { md: 800}, display: "flex", flexDirection: "column"}} >
+                <Box sx={{bgcolor: "white", borderRadius: 3, p:3, m:2, width: { md: 800}, display: "flex", flexDirection: "column"}} >
                     <Typography fontSize={20} fontWeight={600}>Thank you for attempting this exam!</Typography>
                     <Typography fontSize={20} fontWeight={300} mt={2}>We'll let you know the results very soon.</Typography>
                 </Box>
@@ -97,7 +100,7 @@ export default function Attempt(){
         <Navbar />
         <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "95vh"}}>
             {!timer.expired ? 
-            <Box sx={{bgcolor: "white", borderRadius: 3, p:3, width: { md: 800}, display: "flex", flexDirection: "column"}} >
+            <Box sx={{bgcolor: "white", borderRadius: 3, p:3,m:2, width: { md: 800}, display: "flex", flexDirection: "column"}} >
                 <Box sx={{textAlign: "left", mb: 2}}>
                     <Chip label={`Question ${Number(currentQuestion)}/20`} color="primary"/>
                 </Box>
