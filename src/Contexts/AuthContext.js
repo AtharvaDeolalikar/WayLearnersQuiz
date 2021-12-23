@@ -13,6 +13,7 @@ export const contextValues = createContext()
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth()
+auth.languageCode = 'en';
 const db = getFirestore()
 const provider = new GoogleAuthProvider()
 
@@ -25,18 +26,18 @@ export default function ContextProvider({children}){
 
     let navigate = useNavigate()
 
-    useEffect(() => { 
+    useEffect(() => {   
         async function getUserData(uid){
             const docSnap = await getDoc(doc(db, "Students", uid))
             if (docSnap.exists()) {
                 setUserData(docSnap.data())
                 setLoading(false)
               } else {
-                setLoading(false)
                 navigate("/register")
+                setLoading(false)
               }
         }
-        
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 setCurrentUser(user)
@@ -49,7 +50,7 @@ export default function ContextProvider({children}){
         })
 
         getExams()
-    }, [])
+    }, [currentUser])
 
     function signInWithGoogle(){
         signInWithPopup(auth, provider)
@@ -58,21 +59,6 @@ export default function ContextProvider({children}){
                 setCurrentUser(user)
                 navigate("/")
             }).catch((error) => {
-                console.log(error)
-            });
-    }
-
-    function signInWithPhoneNo(phoneNumber){
-        console.log(phoneNumber)
-        signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
-            .then((confirmationResult) => {
-            // SMS sent. Prompt user to type the code from the message, then sign the
-            // user in with confirmationResult.confirm(code).
-                window.confirmationResult = confirmationResult;
-            // ...
-            }).catch((error) => {
-            // Error; SMS not sent
-            // ...
                 console.log(error)
             });
     }
@@ -146,7 +132,8 @@ export default function ContextProvider({children}){
 
     const value = {
         signInWithGoogle,
-        signInWithPhoneNo,
+        setCurrentUser,
+        auth,
         currentUser,
         userData,
         examsData,

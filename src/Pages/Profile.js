@@ -22,7 +22,7 @@ export default function Profile(){
     return (
         <>
         <Navbar />
-            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
+            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "99vh", mt:{xs:5, md:0}}}>
                 <Box component="form" onSubmit={updateUser} sx={{bgcolor: "white", borderRadius: 3, width: 400, display: "flex", justifyContent: "center", flexDirection: "column", p:3}}>
                     <Typography my={2} sx={{fontWeight: 500, fontSize: 25}}>Update Profile</Typography>
                     <TextField name="firstName" label="First Name" sx={{my: 1}} defaultValue={context.userData.firstName}></TextField>

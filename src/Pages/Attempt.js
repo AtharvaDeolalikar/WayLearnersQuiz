@@ -56,7 +56,7 @@ export default function Attempt(){
 
     if(!questions || !timer){
         return (
-            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", height: "90vh"}}>
+            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", height: "99vh"}}>
                 <CircularProgress />
             </Box>
         )
@@ -98,7 +98,7 @@ export default function Attempt(){
     return (
         <>
         <Navbar />
-        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "95vh", mt: {xs: 4}}}>
+        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center",minHeight: "99vh", mt:{xs:5, md:0}}}>
             {!timer.expired ? 
             <Box sx={{bgcolor: "white", borderRadius: 3, p:3,m:2, width: { md: 800}, display: "flex", flexDirection: "column"}} >
                 <Box sx={{textAlign: "left", mb: 2}}>
@@ -111,7 +111,7 @@ export default function Attempt(){
                 <RadioGroup sx={{my: 2, textAlign: "left"}}>
                     {questions[currentQuestion - 1].options.map((option, index) => {
                         return(
-                            <FormControlLabel sx={{my:0.5}} checked={index === selectedOption} onChange={(e) => makeChoice(Number(e.target.value))} key={index} value={index} control={<Radio />} label={option} />
+                            <FormControlLabel sx={{ backgroundColor: index === selectedOption ? "primary.main" : "",  color: index === selectedOption ? "white" : "", borderRadius:3 }} sx={{'input[type="radio"]:checked': {bgcolor: 'primary.main'}}} checked={index === selectedOption} onChange={(e) => makeChoice(Number(e.target.value))} key={index} value={index} control={<Radio />} label={option} />
                         )
                     })}  
                 </RadioGroup>

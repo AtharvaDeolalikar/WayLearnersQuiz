@@ -17,7 +17,7 @@ export default function Register(){
         const data = {
             firstName: e.target.firstName.value,
             lastName: e.target.lastName.value,
-            emailID : context.currentUser.email,
+            emailID : e.target.emailID,
             phoneNo: e.target.phoneNo.value
         }
         context.registerUser(data)
@@ -30,8 +30,8 @@ export default function Register(){
                     <Typography my={2} sx={{fontWeight: 500, fontSize: 25}}>Register</Typography>
                     <TextField name="firstName" label="First Name" sx={{my: 1}} required></TextField>
                     <TextField name="lastName" label="Last Name" sx={{my: 1}} required></TextField>
-                    <TextField name="emailID" label="Email Address" defaultValue={context.currentUser.email} disabled sx={{my: 1}} required></TextField>
-                    <TextField name="phoneNo" label="Phone Number" sx={{my: 1}} required></TextField>
+                    <TextField name="emailID" label="Email Address" defaultValue={context.currentUser.email} disabled={context.currentUser.email ? true : false} sx={{my: 1}} required></TextField>
+                    <TextField name="phoneNo" label="Phone Number" defaultValue={context.currentUser.phoneNumber} disabled={context.currentUser.phoneNumber ? true : false} sx={{my: 1}} required></TextField>
                     <Button type="submit" variant="contained"sx={{my: 2}} size="large" >Register</Button>
                 </Box>
             </Box>

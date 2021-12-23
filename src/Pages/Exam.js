@@ -37,7 +37,7 @@ export default function Exam(){
 
     if(!timer){
         return (
-            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", height: "90vh"}}>
+            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", height: "99vh"}}>
                 <CircularProgress />
             </Box>
         )
@@ -46,9 +46,9 @@ export default function Exam(){
 
     return (
         <><Navbar />
-        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh"}}>
+        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: "99vh", mt:{xs:5, md:0}}}>
             {currentExam ? 
-            <Grid container sx={{bgcolor: "white", borderRadius: 3, m:2, maxWidth: 700, mt:{xs:7}}}  >
+            <Grid container sx={{bgcolor: "white", borderRadius: 3, m:2, maxWidth: 700}}  >
                 <Grid item xs={12} p={3}>
                     <Grid container>
                         <Grid item xs={12} md={6} >
