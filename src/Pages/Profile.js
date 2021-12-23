@@ -13,7 +13,7 @@ export default function Profile(){
         const data = {
             firstName: e.target.firstName.value,
             lastName: e.target.lastName.value,
-            emailID : context.currentUser.email,
+            emailID : e.target.emailID.value,
             phoneNo: e.target.phoneNo.value
         }
         context.updateUser(data)
@@ -27,8 +27,8 @@ export default function Profile(){
                     <Typography my={2} sx={{fontWeight: 500, fontSize: 25}}>Update Profile</Typography>
                     <TextField name="firstName" label="First Name" sx={{my: 1}} defaultValue={context.userData.firstName}></TextField>
                     <TextField name="lastName" label="Last Name" sx={{my: 1}} defaultValue={context.userData.lastName}></TextField>
-                    <TextField name="emailID" label="Email Address" defaultValue={context.currentUser.email} disabled sx={{my: 1}} defaultValue={context.userData.emailID}></TextField>
-                    <TextField name="phoneNo" label="Phone Number" sx={{my: 1}} defaultValue={context.userData.phoneNo}></TextField>
+                    <TextField name="emailID" label="Email Address" disabled sx={{my: 1}} defaultValue={context.userData.emailID}></TextField>
+                    <TextField name="phoneNo" label="Phone Number" disabled sx={{my: 1}} defaultValue={context.userData.phoneNo}></TextField>
                     <Button type="submit" variant="contained"sx={{my: 2}} size="large" >Update</Button>
                 </Box>
             </Box>

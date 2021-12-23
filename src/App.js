@@ -8,7 +8,6 @@ import Login from './Pages/Login';
 import PhoneAuth from './Pages/PhoneAuth';
 import Profile from './Pages/Profile';
 import Register from './Pages/Register';
-import Temp from './Pages/Temp';
 
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
         <Route path="/exam/:examID" element={<Exam />} />
         <Route path="/exam/:examID/attempt" element={<Attempt />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/temp" element={<Temp />} />
       </Routes>
     </ContextProvider>
   );

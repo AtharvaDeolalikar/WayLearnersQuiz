@@ -7,9 +7,9 @@ export default function Register(){
 
     useEffect(() => {
         if(context.userData){
-            context.navigate("/")
+            context.navigate("/profile")
         }
-    })
+    }, [])
     
 
     function registerUser(e){
@@ -17,7 +17,7 @@ export default function Register(){
         const data = {
             firstName: e.target.firstName.value,
             lastName: e.target.lastName.value,
-            emailID : e.target.emailID,
+            emailID : e.target.emailID.value,
             phoneNo: e.target.phoneNo.value
         }
         context.registerUser(data)

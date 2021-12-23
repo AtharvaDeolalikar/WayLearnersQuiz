@@ -1,30 +1,39 @@
-import { Box, Button, Chip, CircularProgress, FormControlLabel, Grid, Radio, RadioGroup, Typography, FormLabel } from "@mui/material";
+import { Box, Button, Chip, CircularProgress, FormControlLabel, Grid, Radio, RadioGroup, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { contextValues } from "../Contexts/AuthContext";
 import Timer from "../Timer";
 import Navbar from "../Components/Navbar";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { collection, doc, documentId, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
 
 export default function Attempt(){
     const {examID} = useParams()
     const context = useContext(contextValues)
     const [currentQuestion, setCurrentQuestion] = useState(1)
     const [userExamStatus, setUserExamStatus] = useState()
-    const [questions, setQuestions] = useState()
+    const [exam, setExam] = useState()
     const [timer, setTimer] = useState()
     const [points, setPoints] = useState()
     const [selectedOption, setSelectedOption] = useState("")
     let _points = 600
     
     useEffect(() => {
-        var exam = context.examsData.find(exam => exam.examID === examID)
-        setQuestions(exam.questions)
+        async function getExam(){
+            const examsRef = collection(context.db, "Exams");
+            // Create a query against the collection.
+            const q = query(examsRef, where(documentId(), "==", examID));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+               setExam(doc.data())
+            })
+        }
+        getExam()
+        setExam(exam)
         var deadline = new Date("Dec 22, 2021 20:05:10 GMT+0530").getTime()
         var current = new Date().getTime()
 
         async function getUserExamStatus(){
-            const answers = await getDoc(doc(getFirestore(), "Exams", examID, "Answersheets", context.currentUser.uid))
+            const answers = await getDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid))
             var tempData = answers.data()
             if(tempData && tempData.lastQuestion){
                 setCurrentQuestion(tempData.lastQuestion)
@@ -54,7 +63,7 @@ export default function Attempt(){
 
     }, [])
 
-    if(!questions || !timer){
+    if(!exam || !timer){
         return (
             <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", height: "99vh"}}>
                 <CircularProgress />
@@ -63,14 +72,14 @@ export default function Attempt(){
     }
 
     async function moveToNextQuestion(){
-        if(currentQuestion === questions.length){
+        if(currentQuestion === exam.questions.length){
             context.submitExam(examID, points)
             setUserExamStatus("finished")
         }else{
             setSelectedOption("")
             setCurrentQuestion(currentQuestion + 1)
             try{
-                await setDoc(doc(getFirestore(), "Exams", examID, "Answersheets", context.currentUser.uid), {lastQuestion: currentQuestion + 1}, { merge: true })
+                await setDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid), {lastQuestion: currentQuestion + 1}, { merge: true })
             }catch(error) {
                 console.log(error)
             }  
@@ -83,7 +92,7 @@ export default function Attempt(){
         //setOption(false)
     }
 
-    if(userExamStatus == "finished"){
+    if(userExamStatus === "finished"){
         return(
             <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "95vh"}}>
                 <Box sx={{bgcolor: "white", borderRadius: 3, p:3, m:2, width: { md: 800}, display: "flex", flexDirection: "column"}} >
@@ -105,13 +114,13 @@ export default function Attempt(){
                     <Chip label={`Question ${Number(currentQuestion)}/20`} color="primary"/>
                 </Box>
                 <Typography fontWeight={500} fontSize={20} sx={{textAlign: "left"}} variant="h3">
-                    {questions[currentQuestion - 1].question}
+                    {exam.questions[currentQuestion - 1].question}
                 </Typography>
                 
                 <RadioGroup sx={{my: 2, textAlign: "left"}}>
-                    {questions[currentQuestion - 1].options.map((option, index) => {
+                    {exam.questions[currentQuestion - 1].options.map((option, index) => {
                         return(
-                            <FormControlLabel sx={{ backgroundColor: index === selectedOption ? "primary.main" : "",  color: index === selectedOption ? "white" : "", borderRadius:3 }} sx={{'input[type="radio"]:checked': {bgcolor: 'primary.main'}}} checked={index === selectedOption} onChange={(e) => makeChoice(Number(e.target.value))} key={index} value={index} control={<Radio />} label={option} />
+                            <FormControlLabel checked={index === selectedOption} onChange={(e) => makeChoice(Number(e.target.value))} key={index} value={index} control={<Radio />} label={option} />
                         )
                     })}  
                 </RadioGroup>
@@ -121,7 +130,7 @@ export default function Attempt(){
                         <Chip label={`${timer.minutes} Minutes ${timer.seconds} Seconds`}  />
                     </Grid>
                     <Grid item xs={12} sm={6} sx={{justifyContent: {xs: "center", sm: "flex-end"}, display: "flex"}}>
-                        <Button variant={currentQuestion === questions.length ? "contained" : "outlined"} onClick={moveToNextQuestion}>{currentQuestion === questions.length ? "Submit" : "Next Question"}</Button>
+                        <Button variant={currentQuestion === exam.questions.length ? "contained" : "outlined"} onClick={moveToNextQuestion}>{currentQuestion === exam.questions.length ? "Submit" : "Next Question"}</Button>
                     </Grid>
                 </Grid>
             </Box> : 

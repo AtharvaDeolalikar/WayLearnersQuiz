@@ -1,4 +1,5 @@
 import { Box, Button, Chip, CircularProgress, Grid, Stack, Typography } from "@mui/material";
+import { collection, documentId, getDocs, query, where } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../Components/Navbar";
@@ -8,12 +9,19 @@ import Timer from "../Timer";
 export default function Exam(){
     const context = useContext(contextValues)
     const {examID} = useParams()
-    const [currentExam, setCurrentExam] = useState()
+    const [exam, setExam] = useState()
     const [timer, setTimer] = useState()
 
     useEffect(() => {
-        var exam = context.examsData.find(exam => exam.examID === examID)
-        setCurrentExam(exam)
+        async function getExam(){
+            const examsRef = collection(context.db, "Exams");
+            const q = query(examsRef, where(documentId(), "==", examID));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+               setExam(doc.data())
+            })
+        }
+        getExam()
 
         var deadline = new Date("Dec 22, 2021 13:11:30 GMT+0530").getTime()
         var current = new Date().getTime()
@@ -24,7 +32,7 @@ export default function Exam(){
         return () => {
             clearInterval(interval)
         }
-    }, [])
+    }, [context.db, examID])
 
     const timerStyles = {
         borderRadius: 4,
@@ -47,13 +55,13 @@ export default function Exam(){
     return (
         <><Navbar />
         <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: "99vh", mt:{xs:5, md:0}}}>
-            {currentExam ? 
+            {exam ? 
             <Grid container sx={{bgcolor: "white", borderRadius: 3, m:2, maxWidth: 700}}  >
                 <Grid item xs={12} p={3}>
                     <Grid container>
                         <Grid item xs={12} md={6} >
-                            <Typography sx={{fontSize: 25, fontWeight: 500}}>{currentExam.topic}</Typography>
-                            <Typography sx={{fontSize: 20, color: "#757575"}}>{currentExam.examName}</Typography>
+                            <Typography sx={{fontSize: 25, fontWeight: 500}}>{exam.topic}</Typography>
+                            <Typography sx={{fontSize: 20, color: "#757575"}}>{exam.examName}</Typography>
                         </Grid>
                         <Grid item xs={12} md={6} sx={{textAlign: {xs: "left", md: 'right'}}}>
                             <Chip label="20 Minutes" />
