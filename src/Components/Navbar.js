@@ -3,6 +3,7 @@ import { AppBar, IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/ma
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { contextValues } from "../Contexts/AuthContext";
+import wayLogo from "../Assets/WayEducationLogo.png"
 
 export default function Navbar(){
     const [anchorEl, setAnchorEl] = useState(null)
@@ -18,26 +19,17 @@ export default function Navbar(){
 
 
     return (
-        <AppBar sx={{bgcolor: "white", color: "black"}}>
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Way Learners
-          </Typography>
+        <AppBar sx={{bgcolor: "white", color: "black"}} >
+        <Toolbar sx={{display: "flex", justifyContent: "space-between"}} >
+        <Link to="/"><img src={wayLogo} style={{maxWidth: 80, height:"auto"}}/></Link>
+          
+          {/* <Typography variant="h6" component="div" >
+            Way Education
+          </Typography> */}
+
             <div>
               <IconButton
                 size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
                 onClick={handleMenu}
                 color="inherit"
               >

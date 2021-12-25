@@ -4,64 +4,61 @@ import { useParams } from "react-router-dom";
 import { contextValues } from "../Contexts/AuthContext";
 import Timer from "../Timer";
 import Navbar from "../Components/Navbar";
-import { collection, doc, documentId, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
+import { collection, doc, documentId, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+
+let startTime, endTime, currentTime
 
 export default function Attempt(){
     const {examID} = useParams()
     const context = useContext(contextValues)
-    const [currentQuestion, setCurrentQuestion] = useState(1)
+    const [currentQuestion, setCurrentQuestion] = useState(0)
+    const [submitButton, showSubmitButton] = useState(false)
     const [userExamStatus, setUserExamStatus] = useState()
     const [exam, setExam] = useState()
     const [timer, setTimer] = useState()
-    const [points, setPoints] = useState()
-    const [selectedOption, setSelectedOption] = useState("")
-    let _points = 600
+    const [selectedOption, setSelectedOption] = useState("")     
     
     useEffect(() => {
         async function getExam(){
             const examsRef = collection(context.db, "Exams");
-            // Create a query against the collection.
             const q = query(examsRef, where(documentId(), "==", examID));
             const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-               setExam(doc.data())
-            })
-        }
-        getExam()
-        setExam(exam)
-        var deadline = new Date("Dec 22, 2021 20:05:10 GMT+0530").getTime()
-        var current = new Date().getTime()
 
-        async function getUserExamStatus(){
-            const answers = await getDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid))
-            var tempData = answers.data()
-            if(tempData && tempData.lastQuestion){
-                setCurrentQuestion(tempData.lastQuestion)
-            }
-            if(tempData && tempData.userExamStatus){
-                setUserExamStatus(tempData.userExamStatus)
-            }
+            querySnapshot.forEach((doc) => {
+                var data = doc.data()
+                setExam(data)
+                startTime = data.startTime.toDate().getTime()
+                endTime = data.endTime.toDate().getTime()
+                currentTime = new Date().getTime()
+
+                if(startTime > currentTime){
+                    context.navigate(`/exam/${examID}/`)
+                }
+            })            
         }
         
-        getUserExamStatus()
-
-        function decrementPoints(){
-            _points = _points - 1
-            setPoints(_points)
+        async function getExamStatus(){
+            const answers = await getDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid))
+            var tempData = answers.data()
+            if(tempData && tempData.userExamStatus === "finished"){
+                setUserExamStatus("finished")
+            }else return null
         }
 
-        const pointsInterval = setInterval(decrementPoints, 200)
+        getExam()
+        getExamStatus()
+
         const interval = setInterval(function(){
-            current = current + 1000
-            setTimer(Timer(deadline, current))
+            currentTime = currentTime + 1000
+            setTimer(Timer(endTime, currentTime))
         }, 1000)
 
         return () => {
             clearInterval(interval)
-            clearInterval(pointsInterval)
         }
 
     }, [])
+
 
     if(!exam || !timer){
         return (
@@ -71,25 +68,83 @@ export default function Attempt(){
         )
     }
 
+    async function getAttemptedAnswer(questionIndex){
+        try{
+            const answers = await getDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid))
+            var tempData = answers.data()
+            if(tempData && tempData.answers[questionIndex]){
+                return tempData.answers[questionIndex]
+            }else return null
+        }catch(error){
+            console.log(error)
+        }
+        
+    }
+    
+
     async function moveToNextQuestion(){
-        if(currentQuestion === exam.questions.length){
-            context.submitExam(examID, points)
-            setUserExamStatus("finished")
+        if(currentQuestion + 1 === exam.questions.length){
+            return
         }else{
+            if(currentQuestion + 2 === exam.questions.length){
+                showSubmitButton(true)
+            }
             setSelectedOption("")
             setCurrentQuestion(currentQuestion + 1)
-            try{
-                await setDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid), {lastQuestion: currentQuestion + 1}, { merge: true })
-            }catch(error) {
-                console.log(error)
-            }  
+            var option = await getAttemptedAnswer(currentQuestion + 1)
+            setSelectedOption(option)
+            if(examID !== "demo"){
+                try{
+                    await setDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid), {lastAttemptedQuestion: currentQuestion}, { merge: true })
+                }catch(error) {
+                    console.log(error)
+                }
+            }
         }
     }
 
-    function makeChoice(index){
-        context.saveHandler(index, currentQuestion, examID)
+
+    async function moveToPreviousQuestion(){
+        if(currentQuestion === 0){
+           return 
+        }else{
+            setSelectedOption("")
+            setCurrentQuestion(currentQuestion - 1)
+            var option = await getAttemptedAnswer(currentQuestion - 1)
+            setSelectedOption(option)
+            if(examID !== "demo"){
+                try{
+                    await setDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid), {lastAttemptedQuestion: currentQuestion}, { merge: true })
+                }catch(error) {
+                    console.log(error)
+                }
+            }
+        }
+    }
+
+
+    async function submitExam(){
+        try{
+            await updateDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid), {points: (endTime - new Date().getTime()), submittedAt: new Date(), userExamStatus: "finished"})
+            setUserExamStatus("finished")
+        }catch(error) {
+            console.log(error)
+        }   
+    }
+
+
+
+    function setChoice(index){
+        if(examID !== "demo"){
+                var tempObj={}
+                tempObj[currentQuestion] = index
+                try{
+                    setDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid), {answers: tempObj, userExamStatus: "ongoing"}, { merge: true })
+                }catch(error) {
+                    console.log(error)
+                }
+            }
         setSelectedOption(index)
-        //setOption(false)
     }
 
     if(userExamStatus === "finished"){
@@ -108,35 +163,38 @@ export default function Attempt(){
         <>
         <Navbar />
         <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center",minHeight: "99vh", mt:{xs:5, md:0}}}>
-            {!timer.expired ? 
+            {!timer.error ? 
             <Box sx={{bgcolor: "white", borderRadius: 3, p:3,m:2, width: { md: 800}, display: "flex", flexDirection: "column"}} >
-                <Box sx={{textAlign: "left", mb: 2}}>
-                    <Chip label={`Question ${Number(currentQuestion)}/20`} color="primary"/>
+                <Box sx={{display: "flex", justifyContent: "space-between", mb: 2}}>
+                    <Chip label={`Question ${Number(currentQuestion) + 1}/20`} />
+                    <Chip label={`${timer.minutes} Minutes ${timer.seconds} Seconds`} color="primary" /> 
                 </Box>
                 <Typography fontWeight={500} fontSize={20} sx={{textAlign: "left"}} variant="h3">
-                    {exam.questions[currentQuestion - 1].question}
+                    {exam.questions[currentQuestion].question}
                 </Typography>
                 
                 <RadioGroup sx={{my: 2, textAlign: "left"}}>
-                    {exam.questions[currentQuestion - 1].options.map((option, index) => {
+                    {exam.questions[currentQuestion].options.map((option, index) => {
                         return(
-                            <FormControlLabel checked={index === selectedOption} onChange={(e) => makeChoice(Number(e.target.value))} key={index} value={index} control={<Radio />} label={option} />
+                            <FormControlLabel checked={index === selectedOption} onChange={(e) => setChoice(Number(e.target.value))} key={index} value={index} control={<Radio />} label={option} />
                         )
                     })}  
                 </RadioGroup>
                 
                 <Grid container rowSpacing={2}>
-                    <Grid item xs={12} sm={6} sx={{justifyContent: {xs: "center", sm: "flex-start"}, display: "flex", alignItems: "center"}}>
+                    {/* <Grid item xs={12} sm={4} sx={{justifyContent: {xs: "center", sm: "flex-start"}, display: "flex", alignItems: "center"}}>
                         <Chip label={`${timer.minutes} Minutes ${timer.seconds} Seconds`}  />
-                    </Grid>
-                    <Grid item xs={12} sm={6} sx={{justifyContent: {xs: "center", sm: "flex-end"}, display: "flex"}}>
-                        <Button variant={currentQuestion === exam.questions.length ? "contained" : "outlined"} onClick={moveToNextQuestion}>{currentQuestion === exam.questions.length ? "Submit" : "Next Question"}</Button>
+                    </Grid> */}
+                    <Grid item xs={12} sx={{justifyContent: {xs: "center", sm: "flex-end"}, flexWrap: {xs: "wrap"}, flexDirection: {xs: "column", sm: "row"} , display: "flex"}}>
+                        <Button variant="outlined" sx={{m:1}} onClick={moveToPreviousQuestion} disabled={currentQuestion === 0}>Previous Question</Button>
+                        <Button variant="outlined" sx={{m:1}} onClick={moveToNextQuestion} disabled={currentQuestion + 1 === exam.questions.length}>Next Question</Button>
+                        {submitButton && <Button variant="contained" onClick={submitExam} sx={{m:1}} >Submit</Button>}
                     </Grid>
                 </Grid>
             </Box> : 
             <Box sx={{bgcolor: "white" , p:4, borderRadius: 2}}>
                 <Typography fontSize={20} fontWeight={600}>Exam deadline is over!</Typography>
-                <Typography fontSize={20} fontWeight={300} mt={2}>We'll let you know the results very soon.</Typography>
+                <Typography fontSize={20} fontWeight={300} mt={2}>We'll let you the know the results very soon</Typography>
             </Box>}
         </Box>
         </>

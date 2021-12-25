@@ -1,12 +1,18 @@
-function Timer(deadline, current){
-    var distance = deadline - current;
+function Timer(Time1, Time2){
+    //console.log(Time1, Time2)
+    /* if(Time1 > Time2){
+        return {error: true, message: {heading: "A", description: "B"}}
+    } */
+    var distance = Time1 - Time2;
+
     if (distance < 1000) {
         const count = {
-            expired: true,
+            error: true,
             hours : 0,
             minutes: 0,
             seconds: 0,
-            days: 0
+            days: 0,
+            loading: false
         }
         return count;
 
@@ -21,7 +27,8 @@ function Timer(deadline, current){
             hours: hours,
             minutes: minutes,
             seconds : seconds,
-            expired: false
+            error: false,
+            loading: false
         }
         return count
     }

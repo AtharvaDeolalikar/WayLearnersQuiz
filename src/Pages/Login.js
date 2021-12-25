@@ -4,6 +4,8 @@ import { useContext, useEffect } from "react";
 import { contextValues } from "../Contexts/AuthContext";
 import PhoneIcon from '@mui/icons-material/Phone';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {ReactComponent as LoginIllustration} from "../Assets/login.svg"
+import Footer from "../Components/Footer";
 
 const provider = new GoogleAuthProvider()
 
@@ -32,8 +34,9 @@ export default function Login(){
         <>
             <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
                 <Box sx={{bgcolor: "white", borderRadius: 3, width: 400, display: "flex", justifyContent: "center", flexDirection: "column", p:3, m:2}}>
-                    <Typography my={2} sx={{fontWeight: 500, fontSize: 25}}>Login</Typography>                    
-                    <Button size="large" sx={{my: 2}} variant="outlined" onClick={signInWithGoogle}><GoogleIcon style={{marginRight: 5}}/>Sign in with Google</Button>
+                    <Typography my={2} sx={{fontWeight: 500, fontSize: 25}}>Login</Typography>
+                    <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}><LoginIllustration style={{width: "100%", height: "auto"}}/></Box>                    
+                    <Button size="large" sx={{my: 2}} variant="contained" onClick={signInWithGoogle}><GoogleIcon style={{marginRight: 5}}/>Continue with Google</Button>
                     <Divider sx={{my: 1}}><Chip label="OR" /></Divider>
                     <Button variant="outlined"sx={{my: 2}} size="large" onClick={() => context.navigate("/login/phone")} fullWidth><PhoneIcon  style={{marginRight: 5}}/>Login with Phone Number</Button>
                 </Box>
