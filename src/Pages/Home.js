@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import { contextValues } from "../Contexts/AuthContext";
-import {ReactComponent as ExamsSVG} from "../Assets/exams.svg"
+import logo from "../Assets/2.png"
 
 export default function Home(){
     const context = useContext(contextValues)
@@ -25,21 +25,21 @@ export default function Home(){
     return (
         <>
         <Navbar />
-        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
-            <Box sx={{bgcolor: "white", borderRadius: 3, p:3, m:1, my:{xs:9, sm:0}, minWidth: {md: 600}}}>
-                <Typography sx={{textAlign: "left", fontSize: 18}}>Scheduled Exams</Typography>
-                <Box sx={{display: "flex", justifyContent: "center"}}><ExamsSVG style={{width: "250px", height: "auto"}}/></Box>
+        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh", background: "linear-gradient(to bottom, #3A3186 0%, #A11981 100%)"}}>
+            <Box sx={{ borderRadius: 3, p:3, m:1, my:{xs:9, sm:0}, minWidth: {md: 600}, color: "white"}}>
+                <Box component="img" src={logo} sx={{width: {xs: 150, md:200}, height: "auto"}}/>
+                <Typography sx={{textAlign: "left", fontSize: 18, mt:7}}>Scheduled Exams</Typography>
                 {examsData ? 
                     <>
                     {examsData.map((exam) => {
                         return (
                             <Grid container key={exam.examID} sx={{display: "flex", py: 2}} rowSpacing={2}>
                                 <Grid item md={6} xs={12} sx={{textAlign: 'left'}}>
-                                    <Link className="examLink" to={`/exam/${exam.examID}`}> <Typography sx={{fontSize: {xs: 25, md: 35}}}>{exam.topic}</Typography></Link>
-                                    <Typography sx={{color: "#757575"}}>{exam.examName}</Typography>
+                                    <Typography component={Link} to={`/exam/${exam.examID}`} sx={{fontSize: {xs: 25, md: 35}, color: "white", textDecoration: "none"}}>{exam.topic}</Typography>
+                                    <Typography sx={{color: "#e0e0e0"}}>{exam.examName}</Typography>
                                 </Grid>
                                 <Grid item md={6} xs={12} sx={{ display: "grid", placeContent: {xs:"flex-start", md:"center flex-end"}}}>
-                                    <Button component={Link} to={`/exam/${exam.examID}`} variant="contained">View Details</Button>
+                                    <Button component={Link} to={`/exam/${exam.examID}`} sx={{background: "linear-gradient(to bottom, #fee9a8 0%, #F5CF47 100%)", color:"black"}} variant="contained">View Details</Button>
                                 </Grid>
                             </Grid>
                         )

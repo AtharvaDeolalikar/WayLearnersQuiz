@@ -92,7 +92,7 @@ export default function ContextProvider({children}){
                 {loading && <Loading />}
                 {!loading && children}
                 {alert.show && <AlertMessage />}
-                {!loading && <Footer />}
+                {/* {!loading && <Footer />} */}
             </contextValues.Provider>
         </ThemeProvider>
     )

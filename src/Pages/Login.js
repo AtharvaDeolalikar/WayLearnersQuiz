@@ -1,11 +1,12 @@
-import { Box, Button, Chip, Divider, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Chip, Divider, FormControlLabel, Grid, IconButton, Stack, Typography } from "@mui/material";
 import GoogleIcon from '@mui/icons-material/Google';
 import { useContext, useEffect } from "react";
 import { contextValues } from "../Contexts/AuthContext";
 import PhoneIcon from '@mui/icons-material/Phone';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import {ReactComponent as LoginIllustration} from "../Assets/login.svg"
-import Footer from "../Components/Footer";
+import logo from "../Assets/2.png"
+import banner from "../Assets/1.png"
+import footer from "../Assets/5.png"
 
 const provider = new GoogleAuthProvider()
 
@@ -32,13 +33,25 @@ export default function Login(){
 
     return (
         <>
-            <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
-                <Box sx={{bgcolor: "white", borderRadius: 3, width: 400, display: "flex", justifyContent: "center", flexDirection: "column", p:3, m:2}}>
-                    <Typography my={2} sx={{fontWeight: 500, fontSize: 25}}>Login</Typography>
-                    <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}><LoginIllustration style={{width: "100%", height: "auto"}}/></Box>                    
-                    <Button size="large" sx={{my: 2}} variant="contained" onClick={signInWithGoogle}><GoogleIcon style={{marginRight: 5}}/>Continue with Google</Button>
-                    <Divider sx={{my: 1}}><Chip label="OR" /></Divider>
-                    <Button variant="outlined"sx={{my: 2}} size="large" onClick={() => context.navigate("/login/phone")} fullWidth><PhoneIcon  style={{marginRight: 5}}/>Login with Phone Number</Button>
+            <Box sx={{display: "flex", textAlign: "center", minHeight: "100vh", background: "linear-gradient(to bottom, #3A3186 0%, #A11981 100%)"}}>
+                <Box sx={{position:"absolute", top:20, left:0, mb:8}}>
+                    <img src={banner} style={{width: "300px", height: "auto"}}/>
+                </Box>
+                <Grid container sx={{width: "100%", display: "flex", justifyContent: "center", color: "white", mt:15}}>
+                        <Grid item xs={12}>  
+                           <Box component="img" src={logo} sx={{width: {xs: 250, md:400}, height: "auto"}} />
+                            <Typography mt={5} mb={1}>Login with</Typography>
+                            <Box>                  
+                                <IconButton sx={{background: "linear-gradient(to bottom, #fee9a8 0%, #F5CF47 100%)", color:"black", mx:2}} onClick={signInWithGoogle} disableRipple><GoogleIcon /></IconButton>
+                                <IconButton sx={{background: "linear-gradient(to bottom, #fee9a8 0%, #F5CF47 100%)", color:"black", mx:2}} onClick={() => context.navigate("/login/phone")} disableRipple><PhoneIcon  /></IconButton>
+                            </Box>
+                            <Box>
+                                <FormControlLabel sx={{color: "white", mt:2}} control={<Checkbox size="small" color="temp" defaultChecked />} label="I agree to all the terms and conditions" />
+                            </Box>
+                        </Grid>
+                </Grid>
+                <Box sx={{display: "flex", justifyContent: "flex-end"}}>
+                    <img src={footer} style={{width: "200px", height: "auto", position: "absolute", bottom:20}}/>
                 </Box>
             </Box>
         </>
