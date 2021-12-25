@@ -20,6 +20,10 @@ export default function Home(){
             setExamsData(exams)
         }
         getExams()
+
+        return () => {
+            
+        }
     }, [])
 
     return (
@@ -45,7 +49,7 @@ export default function Home(){
                         )
                     })}
                 </>
-                : <CircularProgress sx={{my: 5}} />}
+                : <CircularProgress sx={{my: 8}} />}
             </Box>
         </Box>
         </>

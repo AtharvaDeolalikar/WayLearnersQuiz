@@ -40,14 +40,14 @@ export default function Login(){
                 <Grid container sx={{width: "100%", display: "flex", justifyContent: "center", color: "white", mt:15}}>
                         <Grid item xs={12}>  
                            <Box component="img" src={logo} sx={{width: {xs: 250, md:400}, height: "auto"}} />
-                            <Typography mt={5} mb={1}>Login with</Typography>
-                            <Box>                  
-                                <IconButton sx={{background: "linear-gradient(to bottom, #fee9a8 0%, #F5CF47 100%)", color:"black", mx:2}} onClick={signInWithGoogle} disableRipple><GoogleIcon /></IconButton>
-                                <IconButton sx={{background: "linear-gradient(to bottom, #fee9a8 0%, #F5CF47 100%)", color:"black", mx:2}} onClick={() => context.navigate("/login/phone")} disableRipple><PhoneIcon  /></IconButton>
-                            </Box>
-                            <Box>
-                                <FormControlLabel sx={{color: "white", mt:2}} control={<Checkbox size="small" color="temp" defaultChecked />} label="I agree to all the terms and conditions" />
-                            </Box>
+                                <Typography mt={5} mb={1}>Login with</Typography>
+                                <Box>                  
+                                    <IconButton sx={{background: "linear-gradient(to bottom, #fee9a8 0%, #F5CF47 100%)", color:"black", mx:2}} onClick={signInWithGoogle} disableRipple><GoogleIcon /></IconButton>
+                                    <IconButton sx={{background: "linear-gradient(to bottom, #fee9a8 0%, #F5CF47 100%)", color:"black", mx:2}} onClick={() => context.navigate("/login/phone")} disableRipple><PhoneIcon  /></IconButton>
+                                </Box>
+                                <Box>
+                                    <FormControlLabel sx={{color: "white", mt:2}} control={<Checkbox size="small" color="temp" defaultChecked />} label="I agree to all the terms and conditions" />
+                                </Box>
                         </Grid>
                 </Grid>
                 <Box sx={{display: "flex", justifyContent: "flex-end"}}>
