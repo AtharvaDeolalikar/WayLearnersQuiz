@@ -69,16 +69,17 @@ export default function Attempt(){
     }
 
     async function getAttemptedAnswer(questionIndex){
-        try{
-            const answers = await getDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid))
-            var tempData = answers.data()
-            if(tempData && tempData.answers[questionIndex]){
-                return tempData.answers[questionIndex]
-            }else return null
-        }catch(error){
-            console.log(error)
-        }
-        
+        if(examID !== "demo"){
+            try{
+                const answers = await getDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid))
+                var tempData = answers.data()
+                if(tempData && tempData.answers[questionIndex]){
+                    return tempData.answers[questionIndex]
+                }else return null
+            }catch(error){
+                console.log(error)
+            }
+        }else return null        
     }
     
 
@@ -124,12 +125,14 @@ export default function Attempt(){
 
 
     async function submitExam(){
-        try{
-            await updateDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid), {points: (endTime - new Date().getTime()), submittedAt: new Date(), userExamStatus: "finished"})
-            setUserExamStatus("finished")
-        }catch(error) {
-            console.log(error)
-        }   
+        if(examID !== "demo"){
+            try{
+                await updateDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid), {points: (endTime - new Date().getTime()), submittedAt: new Date(), userExamStatus: "finished"})
+            }catch(error) {
+                console.log(error)
+            }   
+        } 
+        setUserExamStatus("finished")  
     }
 
 
@@ -152,7 +155,10 @@ export default function Attempt(){
             <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "95vh"}}>
                 <Box sx={{bgcolor: "white", borderRadius: 3, p:3, m:2, width: { md: 800}, display: "flex", flexDirection: "column"}} >
                     <Typography fontSize={20} fontWeight={600}>Thank you for attempting this exam!</Typography>
-                    <Typography fontSize={20} fontWeight={300} mt={2}>We'll let you know the results very soon.</Typography>
+                    <Typography fontSize={20} fontWeight={300} mt={1}>We'll let you know the results very soon.</Typography>
+                    <Box mt={2}>
+                        <Button onClick={() => context.navigate("/")}>Home</Button>
+                    </Box>
                 </Box>
             </Box>
         )
@@ -194,7 +200,10 @@ export default function Attempt(){
             </Box> : 
             <Box sx={{bgcolor: "white" , p:4, borderRadius: 2}}>
                 <Typography fontSize={20} fontWeight={600}>Exam deadline is over!</Typography>
-                <Typography fontSize={20} fontWeight={300} mt={2}>We'll let you the know the results very soon</Typography>
+                <Typography fontSize={20} fontWeight={300} mt={1}>We'll let you the know the results very soon</Typography>
+                <Box mt={2}>
+                    <Button onClick={() => context.navigate("/")}>Home</Button>
+                </Box>
             </Box>}
         </Box>
         </>

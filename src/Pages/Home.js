@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import { contextValues } from "../Contexts/AuthContext";
 import {ReactComponent as ExamsSVG} from "../Assets/exams.svg"
-import Footer from "../Components/Footer";
 
 export default function Home(){
     const context = useContext(contextValues)
@@ -27,7 +26,7 @@ export default function Home(){
         <>
         <Navbar />
         <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
-            <Box sx={{bgcolor: "white", borderRadius: 3, p:3, m:1, mt:{xs:10, sm:0}, minWidth: {md: 600}}}>
+            <Box sx={{bgcolor: "white", borderRadius: 3, p:3, m:1, my:{xs:9, sm:0}, minWidth: {md: 600}}}>
                 <Typography sx={{textAlign: "left", fontSize: 18}}>Scheduled Exams</Typography>
                 <Box sx={{display: "flex", justifyContent: "center"}}><ExamsSVG style={{width: "250px", height: "auto"}}/></Box>
                 {examsData ? 

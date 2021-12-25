@@ -62,10 +62,12 @@ export default function Exam(){
     }, [context.db, examID])
 
     async function startExam(){
-        try{
-            await setDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid), {startedAt: new Date()}, { merge: true })
-        }catch(error){
-            console.log(error)
+        if(examID !== "demo"){
+            try{
+                await setDoc(doc(context.db, "Exams", examID, "Answersheets", context.currentUser.uid), {startedAt: new Date()}, { merge: true })
+            }catch(error){
+                console.log(error)
+            }
         }
         context.navigate(`/exam/${examID}/attempt`)
     }
@@ -82,7 +84,7 @@ export default function Exam(){
 
     return (
         <><Navbar />
-        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: "99vh", mt:{xs:10, md:2}}}>
+        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: "99vh", my:{xs:7, md:2}}}>
             {exam ? 
             <Grid container sx={{bgcolor: "white", borderRadius: 3, m:2, maxWidth: 700}}  >
                 <Grid item xs={12} p={3}>
@@ -98,14 +100,14 @@ export default function Exam(){
                 </Grid>
                 <Box sx={{display: "flex", justifyContent: "center", width: "100%", mb:3}}><ExamSVG style={{maxWidth: "300px", height: "auto"}} /></Box>
                 <Grid item xs={12} sx={{textAlign: "center"}}>
-                    <Typography fontSize={20} >{message.heading}</Typography>
+                    <Typography fontSize={20} mb={2}>{message.heading}</Typography>
                     {!timer.error && <Stack sx={{display: "flex", flexWrap : "wrap", justifyContent: "center", flexDirection : "row"}}>
                         <Box sx={timerStyles} >{timer.days} <Typography >Day{timer.days > 1 && "s"}</Typography></Box>
                         <Box sx={timerStyles} >{timer.hours} <Typography >Hour{timer.hours > 1 && "s" }</Typography></Box>
                         <Box sx={timerStyles} >{timer.minutes} <Typography >Minute{timer.minutes > 1 && "s"}</Typography></Box>
                         <Box sx={timerStyles} >{timer.seconds} <Typography >Second{timer.seconds > 1 && "s"}</Typography></Box>
                     </Stack>}
-                    <Button variant="contained" onClick={startExam} disabled={!timer.error} sx={{my: 2}}>Start Exam</Button>
+                    {currentTime < endTime && <Button variant="contained" onClick={startExam} disabled={!timer.error} sx={{mb: 2}}>Start Exam</Button>}
                 </Grid>
             </Grid> :
             <CircularProgress />}

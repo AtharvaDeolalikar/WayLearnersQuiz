@@ -1,8 +1,4 @@
 function Timer(Time1, Time2){
-    //console.log(Time1, Time2)
-    /* if(Time1 > Time2){
-        return {error: true, message: {heading: "A", description: "B"}}
-    } */
     var distance = Time1 - Time2;
 
     if (distance < 1000) {
