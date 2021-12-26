@@ -164,6 +164,32 @@ export default function Attempt(){
         )
     }
 
+    var support = (function () {
+        if (!window.DOMParser) return false;
+        var parser = new DOMParser();
+        try {
+            parser.parseFromString('x', 'text/html');
+        } catch(err) {
+            return false;
+        }
+        return true;
+    })()
+
+    const stringToHTML = function (str) {
+        // If DOMParser is supported, use it
+        if (support) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(str, 'text/html');
+            return doc.body;
+        }
+    
+        // Otherwise, fallback to old-school method
+        var dom = document.createElement('div');
+        dom.innerHTML = str;
+        return dom;
+    
+    };
+
 
     return (
         <>
@@ -193,6 +219,7 @@ export default function Attempt(){
                     </Grid> */}
                     <Grid item xs={12} sx={{justifyContent: {xs: "center", sm: "flex-end"}, flexWrap: {xs: "wrap"}, flexDirection: {xs: "column", sm: "row"} , display: "flex"}}>
                         <Button variant="outlined" sx={{m:1}} onClick={moveToPreviousQuestion} disabled={currentQuestion === 0}>Previous Question</Button>
+                        
                         <Button variant="outlined" sx={{m:1}} onClick={moveToNextQuestion} disabled={currentQuestion + 1 === exam.questions.length}>Next Question</Button>
                         {submitButton && <Button variant="contained" onClick={submitExam} sx={{m:1}} >Submit</Button>}
                     </Grid>
