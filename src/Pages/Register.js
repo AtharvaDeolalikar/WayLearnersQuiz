@@ -1,7 +1,6 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { doc, setDoc } from "firebase/firestore";
 import { useContext, useEffect } from "react";
-import Footer from "../Components/Footer";
 import { contextValues } from "../Contexts/AuthContext";
 
 export default function Register(){
@@ -11,7 +10,7 @@ export default function Register(){
         if(context.userData){
             context.navigate("/profile")
         }
-    }, [])
+    }, [context.userData])
         
     async function registerUser(e){
         e.preventDefault()
@@ -40,6 +39,7 @@ export default function Register(){
                     <TextField name="lastName" label="Last Name" sx={{my: 1}} required></TextField>
                     <TextField name="emailID" label="Email Address" defaultValue={context.currentUser.email} disabled={context.currentUser.email ? true : false} sx={{my: 1}} required></TextField>
                     <TextField name="phoneNo" label="Phone Number" defaultValue={context.currentUser.phoneNumber} disabled={context.currentUser.phoneNumber ? true : false} sx={{my: 1}} required></TextField>
+                    <TextField name="city" label="City" sx={{my: 1}} ></TextField>
                     <Button type="submit" variant="contained"sx={{my: 2}} size="large" >Register</Button>
                 </Box>
             </Box>

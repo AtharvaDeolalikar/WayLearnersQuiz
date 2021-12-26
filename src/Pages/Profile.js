@@ -36,6 +36,7 @@ export default function Profile(){
                     <TextField name="lastName" label="Last Name" sx={{my: 1}} defaultValue={context.userData.lastName}></TextField>
                     <TextField name="emailID" label="Email Address" disabled sx={{my: 1}} defaultValue={context.userData.emailID}></TextField>
                     <TextField name="phoneNo" label="Phone Number" disabled sx={{my: 1}} defaultValue={context.userData.phoneNo}></TextField>
+                    <TextField name="city" label="City" sx={{my: 1}} defaultValue={context.userData.city}></TextField>
                     <Button type="submit" variant="contained"sx={{my: 2}} size="large" >Update</Button>
                 </Box>
             </Box>

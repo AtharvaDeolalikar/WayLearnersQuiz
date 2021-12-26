@@ -14,7 +14,7 @@ export default function PhoneAuth(){
         if(context.currentUser){
             context.navigate("/")
         }
-    }, [])
+    }, [context.currentUser])
 
     function signInWithPhoneNo(e){
         e.preventDefault()
@@ -64,15 +64,14 @@ export default function PhoneAuth(){
                 <Box component="form" onSubmit={signInWithPhoneNo} >
                     <Box component="img" src={phoneIllustration} sx={{maxWidth : 100}} />
                 <Typography my={2} sx={{fontWeight: 500, fontSize: 25}}>Login with Phone Number</Typography>
-                <TextField 
+                <div className="phoneAuthcustomInput">
+                <span>+91</span>
+                <input
                     label="Phone Number" 
-                    sx={{my: 1, color: "white"}} 
-                    name="phoneNo" 
-                    fullWidth 
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">+91</InputAdornment>,
-                    }}>
-                </TextField>
+                    placeholder="Enter your phone number"
+                    name="phoneNo">
+                </input>
+                </div>
                 {!confirmation.result && 
                 <LoadingButton 
                     size="large" 
@@ -88,7 +87,12 @@ export default function PhoneAuth(){
                 {confirmation.result &&
                     <Box component="form" onSubmit={verifyOTP}>                
                         <Typography mt={3} mb={2}  textAlign="left">{`Enter the six digit code we sent to +91 ${confirmation.phoneNo}`}</Typography>
-                        <TextField name="OTP" label="Verification Code" fullWidth  ></TextField>
+                        <input 
+                            className="phoneAuthcustomInput2"
+                            name="OTP" 
+                            placeholder="Enter the Verification Code" 
+                            fullWidth  
+                        ></input>
                         <LoadingButton type="submit" sx={{background: "linear-gradient(to bottom, #fee9a8 0%, #F5CF47 100%)", color: "black", my:2}}  loading={loading} size="large" id="sign-in-button" fullWidth>Verify OTP</LoadingButton>
                     </Box>
                 }

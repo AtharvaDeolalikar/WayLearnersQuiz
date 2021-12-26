@@ -173,7 +173,7 @@ export default function Attempt(){
             <Box sx={{bgcolor: "white", borderRadius: 3, p:3,m:2, width: { md: 800}, display: "flex", flexDirection: "column"}} >
                 <Box sx={{display: "flex", justifyContent: "space-between", mb: 2}}>
                     <Chip label={`Question ${Number(currentQuestion) + 1}/20`} />
-                    <Chip label={`${timer.minutes} Minutes ${timer.seconds} Seconds`} color="primary" /> 
+                    {examID !== 'demo' && <Chip label={`${timer.minutes} Minutes ${timer.seconds} Seconds`} color="primary" />}
                 </Box>
                 <Typography fontWeight={500} fontSize={20} sx={{textAlign: "left"}} variant="h3">
                     {exam.questions[currentQuestion].question}
