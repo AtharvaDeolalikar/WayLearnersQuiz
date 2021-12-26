@@ -84,7 +84,7 @@ export default function Exam(){
 
     return (
         <><Navbar />
-        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: "99vh", my:{xs:7, md:2}}}>
+        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: "99vh", my:{xs:7, md:5}}}>
             {exam ? 
             <Grid container sx={{bgcolor: "white", borderRadius: 3, m:2, maxWidth: 700}}  >
                 <Grid item xs={12} p={3}>

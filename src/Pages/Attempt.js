@@ -110,8 +110,9 @@ export default function Attempt(){
            return 
         }else{
             setSelectedOption("")
-            setCurrentQuestion(currentQuestion - 1)
             var option = await getAttemptedAnswer(currentQuestion - 1)
+            setCurrentQuestion(currentQuestion - 1)
+
             setSelectedOption(option)
             if(examID !== "demo"){
                 try{

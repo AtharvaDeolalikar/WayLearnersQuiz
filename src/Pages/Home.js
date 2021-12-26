@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, documentId, getDocs, orderBy, query } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
@@ -12,8 +12,10 @@ export default function Home(){
 
     useEffect(() => {
         async function getExams(){
-            const querySnapshot = await getDocs(collection(context.db, "Exams"))
             const exams = []
+            //const querySnapshot = await getDocs(collection(context.db, "Exams"))
+            const q = query(collection(context.db, "Exams"), orderBy('sortNum'))
+            const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 exams.push({...doc.data(), examID: doc.id})
             })
@@ -22,7 +24,7 @@ export default function Home(){
         getExams()
 
         return () => {
-            
+
         }
     }, [])
 

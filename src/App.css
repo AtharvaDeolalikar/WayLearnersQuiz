@@ -49,3 +49,7 @@ body{
   font-size: 15px;
   outline: none;
 }
+
+.terms li{
+  margin: 5px 0px;
+}
