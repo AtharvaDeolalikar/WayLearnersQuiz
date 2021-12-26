@@ -81,6 +81,7 @@ export default function ContextProvider({children}){
         db,
         currentUser,
         userData,
+        setUserData,
         logOut,
         setLoading,
         navigate,

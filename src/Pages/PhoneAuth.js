@@ -90,8 +90,7 @@ export default function PhoneAuth(){
                         <input 
                             className="phoneAuthcustomInput2"
                             name="OTP" 
-                            placeholder="Enter the Verification Code" 
-                            fullWidth  
+                            placeholder="Enter the Verification Code"   
                         ></input>
                         <LoadingButton type="submit" sx={{background: "linear-gradient(to bottom, #fee9a8 0%, #F5CF47 100%)", color: "black", my:2}}  loading={loading} size="large" id="sign-in-button" fullWidth>Verify OTP</LoadingButton>
                     </Box>
