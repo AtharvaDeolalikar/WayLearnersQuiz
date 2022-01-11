@@ -10,7 +10,7 @@ export default function TermsConditions(){
                     <Typography sx={{fontSize: 25, textAlign: "center", fontWeight: 600}} >Terms and Conditions</Typography>
                     <ul className="terms">
                         <li>Exam will be of 20 questions.</li>
-                        <li>Tie provided for the exam will be 20 minutes.</li>
+                        <li>Time provided for the exam will be 20 minutes.</li>
                         <li>You have to finish the whole exam in 20 minutes.</li>
                         <li>The fastest and accurate answer is required to secure RANK in the contest for the scholarship.</li>
                         <li>Minimum passing marks to secure the RANK is 35% i.e. you have to give at least 7 right answer.</li>
